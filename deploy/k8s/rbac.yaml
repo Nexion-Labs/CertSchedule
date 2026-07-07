@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: certschedule
+  namespace: certschedule
+---
+# Domains are user-configurable to target any namespace/secret name, so the
+# app needs secret management across the whole cluster. Scope this down to
+# specific namespaces (Role + RoleBinding per namespace) if your security
+# posture requires it.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: certschedule-secret-manager
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "create", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: certschedule-secret-manager
+subjects:
+  - kind: ServiceAccount
+    name: certschedule
+    namespace: certschedule
+roleRef:
+  kind: ClusterRole
+  name: certschedule-secret-manager
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,21 @@
+services:
+  certschedule:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - certschedule-data:/app/data
+      # To let the container reach a real cluster, uncomment and point at your
+      # kubeconfig (without this, k8s Secret updates fail but everything else
+      # still works, per the app's in-cluster/kubeconfig auto-detect fallback):
+      # - ~/.kube/config:/home/certschedule/.kube/config:ro
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?set ENCRYPTION_KEY in .env, must be 32 bytes}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      CERTBOT_STAGING: "true"
+      # KUBECONFIG: /home/certschedule/.kube/config
+
+volumes:
+  certschedule-data:

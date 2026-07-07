@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: certschedule
+  namespace: certschedule
+spec:
+  selector:
+    app: certschedule
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080

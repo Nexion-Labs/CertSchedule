@@ -1,0 +1,11 @@
+bin/
+data/
+.env
+web/node_modules/
+web/dist/
+.claude
+.agent
+.gemini
+*.db
+*.log
+.DS_Store
